@@ -33,8 +33,8 @@ function generateUniqueID() {
 function ShoppingListApp() {
     const [items, setItems] = useState([]);
     const [listName, setListName] = useState('Shopping List');
-    const [selectedFood, setSelectedFood] = useState('');
-    const [foodQuantity, setFoodQuantity] = useState(1);
+    const [selectedItems, setSelectedFood] = useState('');
+    const [itemCount, setFoodQuantity] = useState(1);
     const [users, setUsers] = useState([]);
     const [currentUser, setCurrentUser] = useState('');
     const [filter, setFilter] = useState('all');
@@ -44,10 +44,10 @@ function ShoppingListApp() {
     const navigate = useNavigate();
 
     const addItem = () => {
-        if (selectedFood && !items.some((item) => item.food === selectedFood)) {
+        if (selectedItems && !items.some((item) => item.food === selectedItems)) {
             const newItem = {
-                food: selectedFood,
-                quantity: foodQuantity,
+                food: selectedItems,
+                quantity: itemCount,
                 completed: false,
             };
             setItems([...items, newItem]);
@@ -55,17 +55,17 @@ function ShoppingListApp() {
         }
     };
 
-    const removeItem = (food) => {
-        const updatedItems = items.filter((item) => item.food !== food);
-        setItems(updatedItems);
+    const removeItem = (index) => {
+        const updatedItemList = items.filter((item) => item.food !== index);
+        setItems(updatedItemList);
     };
 
-    const toggleItemCompletion = (food) => {
-        const updatedItems = [...items];
-        const itemToUpdate = updatedItems.find((item) => item.food === food);
-        if (itemToUpdate) {
-            itemToUpdate.completed = !itemToUpdate.completed;
-            setItems(updatedItems);
+    const itemStatus = (index) => {
+        const checkedItemList = [...items];
+        const checkedItem = checkedItemList.find((item) => item.food === index);
+        if (checkedItem) {
+            checkedItem.completed = !checkedItem.completed;
+            setItems(checkedItemList);
         }
     };
 
@@ -73,7 +73,7 @@ function ShoppingListApp() {
         setListName(newName);
     };
 
-    const addMember = () => {
+    const addUser = () => {
         const newUser = `User ${userCounter.current}`;
         userCounter.current++;
         setUsers([...users, newUser]);
@@ -92,7 +92,7 @@ function ShoppingListApp() {
         setCurrentUser('Owner');
     };
 
-    const leaveList = () => {
+    const leave = () => {
         setCurrentUser('');
         navigate('/');
 
@@ -112,7 +112,7 @@ function ShoppingListApp() {
                         <button className="btn btn-success" onClick={switchToOwner}>
                             You'r user
                         </button>
-                        <button className="btn btn-danger ml-2" onClick={leaveList}>
+                        <button className="btn btn-danger ml-2" onClick={leave}>
                             Leave
                         </button>
                     </div>
@@ -121,7 +121,7 @@ function ShoppingListApp() {
                         <button className="btn btn-warning" onClick={switchToUser}>
                             You'r owner
                         </button>
-                        <button className="btn btn-danger ml-2" onClick={leaveList}>
+                        <button className="btn btn-danger ml-2" onClick={leave}>
                             Leave
                         </button>
                     </div>
@@ -130,7 +130,7 @@ function ShoppingListApp() {
                         <button className="btn btn-success" onClick={switchToOwner}>
                             You'r user
                         </button>
-                        <button className="btn btn-danger ml-2" onClick={leaveList}>
+                        <button className="btn btn-danger ml-2" onClick={leave}>
                             Leave
                         </button>
                     </div>
@@ -150,7 +150,7 @@ function ShoppingListApp() {
                         </div>
                         <div className="col-md-4 col-sm-6">
                             <h3>Add User</h3>
-                            <button className="btn btn-primary mt-2" onClick={addMember}>
+                            <button className="btn btn-primary mt-2" onClick={addUser}>
                                 Add User
                             </button>
                         </div>
@@ -162,7 +162,7 @@ function ShoppingListApp() {
                 <div className="col-md-4 col-sm-6">
                     <select
                         className="form-control select-food"
-                        value={selectedFood}
+                        value={selectedItems}
                         onChange={(e) => setSelectedFood(e.target.value)}
                     >
                         <option value="">Select food</option>
@@ -177,7 +177,7 @@ function ShoppingListApp() {
                     <input
                         type="number"
                         className="form-control input-quantity"
-                        value={foodQuantity}
+                        value={itemCount}
                         onChange={(e) => setFoodQuantity(parseInt(e.target.value))}
                         min="1"
                         max="99"
@@ -210,7 +210,7 @@ function ShoppingListApp() {
                                         type="checkbox"
                                         className="form-check-input"
                                         checked={item.completed}
-                                        onChange={() => toggleItemCompletion(item.food)}
+                                        onChange={() => itemStatus(item.food)}
                                     />
                                     <label className="form-check-label">
                                         {item.quantity}x {item.food}
