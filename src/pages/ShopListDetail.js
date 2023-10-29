@@ -35,7 +35,7 @@ function ShoppingListApp() {
     const [listName, setListName] = useState('Shopping List');
     const [selectedFood, setSelectedFood] = useState('');
     const [foodQuantity, setFoodQuantity] = useState(1);
-    const [members, setMembers] = useState([]);
+    const [users, setUsers] = useState([]);
     const [currentUser, setCurrentUser] = useState('');
     const [filter, setFilter] = useState('all');
 
@@ -76,24 +76,19 @@ function ShoppingListApp() {
     const addMember = () => {
         const newUser = `User ${userCounter.current}`;
         userCounter.current++;
-        setMembers([...members, newUser]);
-    };
-
-    const removeMember = (user) => {
-        const updatedMembers = members.filter((member) => member !== user);
-        setMembers(updatedMembers);
+        setUsers([...users, newUser]);
     };
 
     const removeUser = (user) => {
-        const updatedMembers = members.filter((member) => member !== user);
-        setMembers(updatedMembers);
+        const updatedUsers = users.filter((u) => u !== user);
+        setUsers(updatedUsers);
     };
 
-    const becameUser = () => {
+    const switchToUser = () => {
         setCurrentUser('User');
     };
 
-    const becameOwner = () => {
+    const switchToOwner = () => {
         setCurrentUser('Owner');
     };
 
@@ -114,7 +109,7 @@ function ShoppingListApp() {
             <div className="mt-3">
                 {currentUser === 'User' ? (
                     <div className='buttons'>
-                        <button className="btn btn-success" onClick={becameOwner}>
+                        <button className="btn btn-success" onClick={switchToOwner}>
                             You'r user
                         </button>
                         <button className="btn btn-danger ml-2" onClick={leaveList}>
@@ -123,7 +118,7 @@ function ShoppingListApp() {
                     </div>
                 ) : currentUser === 'Owner' ? (
                     <div className='buttons'>
-                        <button className="btn btn-warning" onClick={becameUser}>
+                        <button className="btn btn-warning" onClick={switchToUser}>
                             You'r owner
                         </button>
                         <button className="btn btn-danger ml-2" onClick={leaveList}>
@@ -132,7 +127,7 @@ function ShoppingListApp() {
                     </div>
                 ) : (
                     <div className='buttons'>
-                        <button className="btn btn-success" onClick={becameOwner}>
+                        <button className="btn btn-success" onClick={switchToOwner}>
                             You'r user
                         </button>
                         <button className="btn btn-danger ml-2" onClick={leaveList}>
@@ -234,7 +229,7 @@ function ShoppingListApp() {
             <div>
                 <h1>Users</h1>
                 <ul className="list-group" id="members-list">
-                    {members.map((member, index) => (
+                    {users.map((member, index) => (
                         <li key={index} className="list-group-item" id="members-list-item">
                             {member}
                             {currentUser === 'Owner' && (
