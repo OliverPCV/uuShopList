@@ -1,3 +1,11 @@
+/*<h1 className="home-title">Shopping Lists</h1>
+      <div className="box">
+        <p>Shopping List</p>
+        <Link to="/shoplistdetail">
+          <button>Join</button>
+        </Link>
+      </div>*/
+
 .home-page {
     display: flex;
     flex-direction: column;
