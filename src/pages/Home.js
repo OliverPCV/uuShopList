@@ -1,17 +1,19 @@
 import "../styles/Home.css";
-
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import CreateList from '../components/CreateList';
+import { Link } from 'react-router-dom'; 
+import ShopListDetail from '../pages/ShopListDetail'; // Importujte ShopListDetail
 
 
 const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [lists, setLists] = useState([]);
   const [createdList, setCreatedList] = useState(null);
 
   const handleCreateList = (listName) => {
-    console.log(`Vytvořit seznam s názvem: ${listName}`);
-    setCreatedList(listName);
+    const newList = { id: Date.now(), name: listName };
+    setLists((prevLists) => [...prevLists, newList]);
+    setCreatedList(newList);
     setIsModalOpen(false);
   };
 
@@ -21,10 +23,8 @@ const Home = () => {
 
   return (
     <div>
-
-
-      <h1 className="home-title">Shopping Lists</h1>
-      <button onClick={() => setIsModalOpen(true)}>Create Shopping List</button>
+      <h1>Domovská stránka</h1>
+      <button onClick={() => setIsModalOpen(true)}>Otevřít modální okno</button>
 
       <CreateList
         isModalOpen={isModalOpen}
@@ -32,13 +32,21 @@ const Home = () => {
         onCancel={handleCancel}
       />
 
-      {createdList && <p>Vytvořený seznam: {createdList}</p>}
-      <div className="box">
-        <p>Shopping List</p>
-        <Link to="/shoplistdetail">
-          <button>Join</button>
-        </Link>
-      </div>
+      <h2>Seznamy:</h2>
+      <ul>
+        {lists.map((list) => (
+          <li key={list.id}>
+            <Link
+              to={`/shoplistdetail/${list.id}`}
+              state={{ lists: [list] }}
+            >
+              {list.name}
+            </Link>
+          </li>
+        ))}
+      </ul>
+
+      
     </div>
   );
 };

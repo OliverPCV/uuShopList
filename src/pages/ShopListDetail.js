@@ -1,7 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import '../styles/ShopListDetail.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+
 
 const Items = [
     'Rice',
@@ -30,18 +32,33 @@ function generateUniqueID() {
     return Math.random().toString(36).substr(2, 9);
 }
 
-function ShoppingListApp() {
+const ShoppingListDetail = () => {
     const [items, setItems] = useState([]);
-    const [listName, setListName] = useState('Shopping List');
-    const [selectedItems, setSelectedFood] = useState('');
-    const [itemCount, setFoodQuantity] = useState(1);
-    const [users, setUsers] = useState([]);
-    const [currentUser, setCurrentUser] = useState('');
-    const [filter, setFilter] = useState('all');
+  const [listName, setListName] = useState('Shopping List');
+  const [selectedItems, setSelectedFood] = useState('');
+  const [itemCount, setFoodQuantity] = useState(1);
+  const [users, setUsers] = useState([]);
+  const [currentUser, setCurrentUser] = useState('');
+  const [filter, setFilter] = useState('all');
 
-    const userCounter = useRef(0);
+  const userCounter = useRef(0);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-    const navigate = useNavigate();
+  useEffect(() => {
+    // Přistup k seznamům ze stavu lokace
+    const lists = location.state?.lists || [];
+    // Zde můžete provést další logiku, např. inicializovat seznam nebo zpracovat data
+    console.log(lists);
+
+    // Příklad, jak získat jméno prvního seznamu ze seznamu
+    if (lists.length > 0) {
+      setListName(lists[0].name);
+    }
+  }, [location.state]);
+
+  
+    
 
     const addItem = () => {
         if (selectedItems && !items.some((item) => item.food === selectedItems)) {
@@ -136,27 +153,27 @@ function ShoppingListApp() {
                     </div>
                 )}
                 {currentUser === 'Owner' && (
-                <div className="mt-3">
-                    <div className="row admin-menu">
-                        <h2>Owner's menu</h2>
-                        <div className="col-md-4 col-sm-6">
-                            <h3>Rename List</h3>
-                            <input
-                                type="text"
-                                className="form-control"
-                                value={listName}
-                                onChange={(e) => changeListName(e.target.value)}
-                            />
-                        </div>
-                        <div className="col-md-4 col-sm-6">
-                            <h3>Add User</h3>
-                            <button className="btn btn-primary mt-2" onClick={addUser}>
-                                Add User
-                            </button>
+                    <div className="mt-3">
+                        <div className="row admin-menu">
+                            <h2>Owner's menu</h2>
+                            <div className="col-md-4 col-sm-6">
+                                <h3>Rename List</h3>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    value={listName}
+                                    onChange={(e) => changeListName(e.target.value)}
+                                />
+                            </div>
+                            <div className="col-md-4 col-sm-6">
+                                <h3>Add User</h3>
+                                <button className="btn btn-primary mt-2" onClick={addUser}>
+                                    Add User
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
+                )}
             </div>
             <div className="row mb-2">
                 <div className="col-md-4 col-sm-6">
@@ -242,11 +259,11 @@ function ShoppingListApp() {
                 </ul>
             </div>
 
-            
-            
-            
+
+
+
         </div>
     );
 }
 
-export default ShoppingListApp;
+export default ShoppingListDetail;
